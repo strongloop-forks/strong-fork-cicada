@@ -2,7 +2,7 @@ var path = require('path');
 var EventEmitter = require('events').EventEmitter;
 
 var inherits = require('inherits');
-var pushover = require('pushover');
+var pushover = require('strong-fork-pushover');
 
 var wrapCommit = require('./lib/commit');
 var runCommand = require('./lib/command');
