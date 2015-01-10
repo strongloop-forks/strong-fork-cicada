@@ -2,8 +2,13 @@ var http = require('http');
 var cicada = require('../');
 var test = require('tap').test;
 var spawn = require('child_process').spawn;
+var tmpdir = require('os').tmpdir;
+var path = require('path');
+var fs = require('fs');
 
-var repoDir = '/tmp/cicada-test/' + Math.random().toString(16).slice(2);
+var repoDir = path.resolve(fs.realpathSync(tmpdir()),
+                           'cicada-test',
+                           Math.random().toString(16).slice(2));
 var ci = cicada(repoDir);
 var server = http.createServer(ci.handle);
 

@@ -3,10 +3,14 @@ var cicada = require('../');
 var test = require('tap').test;
 var spawn = require('child_process').spawn;
 var mkdirp = require('mkdirp');
+var tmpdir = require('os').tmpdir;
+var path = require('path');
+var fs = require('fs');
 
-var basedir = '/tmp/cicada-dirmapped-test/'
-    + Math.random().toString(16).slice(2);
-mkdirp.sync(basedir + '/abcdefg');
+var basedir = path.join(fs.realpathSync(tmpdir()),
+                        'cicada-dirmapped-test',
+                        Math.random().toString(16).slice(2));
+mkdirp.sync(path.join(basedir, 'abcdefg'));
 
 var ci;
 var server = http.createServer(function (req, res) {
