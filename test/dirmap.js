@@ -18,7 +18,7 @@ var server = http.createServer(function (req, res) {
 });
 
 test('setup', function (t) {
-    server.listen(0, t.end.bind(t));
+    server.listen(0, '127.0.0.1', t.end.bind(t));
 });
 
 test('dir-mapped push', function (t) {
@@ -64,7 +64,7 @@ test('dir-mapped push', function (t) {
     });
     
     spawn(__dirname + '/push.sh', [
-        'http://localhost:' + server.address().port + '/beep.git'
+        'http://127.0.0.1:' + server.address().port + '/beep.git'
     ]);
 });
 

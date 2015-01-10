@@ -13,7 +13,7 @@ var ci = cicada(repoDir);
 var server = http.createServer(ci.handle);
 
 test('setup', function (t) {
-    server.listen(0, t.end.bind(t));
+    server.listen(0, '127.0.0.1', t.end.bind(t));
 });
 
 test('push', function (t) {
@@ -46,7 +46,7 @@ test('push', function (t) {
     });
     
     spawn(__dirname + '/push.sh', [
-        'http://localhost:' + server.address().port + '/beep.git'
+        'http://127.0.0.1:' + server.address().port + '/beep.git'
     ]);
 });
 
