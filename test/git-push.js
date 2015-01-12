@@ -3,7 +3,7 @@ var fs = require('fs');
 var path = require('path');
 var tmpdir = require('os').tmpdir;
 
-var dir = path.join(fs.realpathSync(tmpdir()), 'cicada-test', Math.random().toString(16).slice(2));
+var dir = path.resolve(fs.realpathSync(tmpdir()), 'cicada-test', Math.random().toString(16).slice(2));
 mkdir('-p', dir);
 cd(dir);
 'beep boop!'.to('robot.txt');

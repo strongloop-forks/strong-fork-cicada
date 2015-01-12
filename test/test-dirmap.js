@@ -53,7 +53,7 @@ test('dir-mapped push', function (t) {
         })();
 
         (function () {
-            var ps = commit.spawn('pwd');
+            var ps = commit.spawn('node -p process.cwd()');
             var data = '';
             ps.stdout.on('data', function (buf) { data += buf });
             ps.on('close', function (code) {
