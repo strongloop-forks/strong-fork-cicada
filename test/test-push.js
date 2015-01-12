@@ -2,46 +2,28 @@ var http = require('http');
 var cicada = require('../');
 var test = require('tap').test;
 var spawn = require('child_process').spawn;
-var mkdirp = require('mkdirp');
 var tmpdir = require('os').tmpdir;
 var path = require('path');
 var fs = require('fs');
 
-var basedir = path.join(fs.realpathSync(tmpdir()),
-                        'cicada-dirmapped-test',
-                        Math.random().toString(16).slice(2));
-mkdirp.sync(path.join(basedir, 'abcdefg'));
-
-var ci;
-var server = http.createServer(function (req, res) {
-    ci.handle(req, res);
-});
+var repoDir = path.resolve(fs.realpathSync(tmpdir()),
+                           'cicada-test',
+                           Math.random().toString(16).slice(2));
+var ci = cicada(repoDir);
+var server = http.createServer(ci.handle);
 
 test('setup', function (t) {
     server.listen(0, '127.0.0.1', t.end.bind(t));
 });
 
-test('dir-mapped push', function (t) {
-    t.plan(8 + 2 + 6);
-    
-    ci = cicada({
-        repodir : function (repo) {
-            // 8 of these should fire
-            t.equal(repo, 'beep.git');
-            return basedir + '/repo-abcdefg';
-        },
-        workdir : function (commit) {
-            // 1 of these should fire
-            t.equal(commit.repo, 'beep.git');
-            t.equal(commit.cwd, basedir + '/repo-abcdefg');
-            return basedir + '/abcdefg';
-        }
-    });
-    
+test('push', function (t) {
+    t.plan(6);
+
     ci.on('commit', function (commit) {
         t.equal(commit.repo, 'beep.git');
-        t.equal(commit.dir, basedir + '/abcdefg');
-        
+        var workDir = repoDir + '/work/';
+        t.equal(commit.dir.slice(0, workDir.length), workDir);
+
         (function () {
             var ps = commit.spawn('ls');
             var data = '';
@@ -51,7 +33,7 @@ test('dir-mapped push', function (t) {
                 t.equal(data, 'robot.txt\n');
             });
         })();
-        
+
         (function () {
             var ps = commit.spawn('pwd');
             var data = '';
@@ -62,8 +44,8 @@ test('dir-mapped push', function (t) {
             });
         })();
     });
-    
-    spawn(__dirname + '/push.sh', [
+
+    spawn(process.execPath, [ path.join(__dirname, 'git-push.js'),
         'http://127.0.0.1:' + server.address().port + '/beep.git'
     ]);
 });

@@ -14,10 +14,11 @@
     "shell-quote": "~0.0.1"
   },
   "scripts": {
-    "test": "tap test/*.js"
+    "test": "tap test/test-*.js"
   },
   "devDependencies": {
     "comandante": "~0.0.1",
+    "shelljs": "^0.3.0",
     "tap": "^0.4.13"
   },
   "repository": {
