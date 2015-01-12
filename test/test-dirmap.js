@@ -28,19 +28,19 @@ test('dir-mapped push', function (t) {
         repodir : function (repo) {
             // 8 of these should fire
             t.equal(repo, 'beep.git');
-            return basedir + '/repo-abcdefg';
+            return path.join(basedir, 'repo-abcdefg');
         },
         workdir : function (commit) {
             // 1 of these should fire
             t.equal(commit.repo, 'beep.git');
-            t.equal(commit.cwd, basedir + '/repo-abcdefg');
-            return basedir + '/abcdefg';
+            t.equal(commit.cwd, path.join(basedir, 'repo-abcdefg'));
+            return path.join(basedir, 'abcdefg');
         }
     });
 
     ci.on('commit', function (commit) {
         t.equal(commit.repo, 'beep.git');
-        t.equal(commit.dir, basedir + '/abcdefg');
+        t.equal(commit.dir, path.join(basedir, 'abcdefg'));
 
         (function () {
             var ps = commit.spawn('ls');

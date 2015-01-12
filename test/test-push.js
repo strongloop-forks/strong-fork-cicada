@@ -21,7 +21,7 @@ test('push', function (t) {
 
     ci.on('commit', function (commit) {
         t.equal(commit.repo, 'beep.git');
-        var workDir = repoDir + '/work/';
+        var workDir = path.join(repoDir, 'work');
         t.equal(commit.dir.slice(0, workDir.length), workDir);
 
         (function () {
